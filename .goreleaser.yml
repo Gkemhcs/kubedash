@@ -1,0 +1,33 @@
+project_name: kubedash
+
+release:
+  github:
+    owner: Gkemhcs  # Your GitHub username
+    name: kubedash  # Repository name
+
+builds:
+  - id: default
+    main: ./main.go  # Adjust path as needed
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
