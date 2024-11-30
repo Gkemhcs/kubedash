@@ -36,14 +36,14 @@ func ListReplicaSets(namespace string, clientSet *client.K8sConfig) ([][]string,
 	return daemonSetList, nil
 }
 
-func DeleteReplicaSet(replicaSetName string,namespace string, clientSet *client.K8sConfig)(error){
-	if namespace==""{
-	  namespace=clientSet.DefaultNamespace
+func DeleteReplicaSet(replicaSetName string, namespace string, clientSet *client.K8sConfig) error {
+	if namespace == "" {
+		namespace = clientSet.DefaultNamespace
 	}
-	err:=clientSet.Client.AppsV1().ReplicaSets(namespace).Delete(context.TODO(),replicaSetName,metav1.DeleteOptions{})
-	if err!=nil {
-	  return err 
+	err := clientSet.Client.AppsV1().ReplicaSets(namespace).Delete(context.TODO(), replicaSetName, metav1.DeleteOptions{})
+	if err != nil {
+		return err
 	}
-  
-  return nil 
-  }
+
+	return nil
+}

@@ -1,43 +1,42 @@
-package objects 
+package objects
+
 import (
-    "context"
+	"context"
+	"fmt"
 	"time"
-   "fmt"
-   
-	client "github.com/Gkemhcs/kubedash/internal/k8s"
-	"text/template"
+
 	"bytes"
-    metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-   
-//	"gopkg.in/yaml.v3"
+	client "github.com/Gkemhcs/kubedash/internal/k8s"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"text/template"
+	//	"gopkg.in/yaml.v3"
 )
 
-
-func ListConfigMaps(namespace string , clientSet *client.K8sConfig)([][]string,error){
-	if namespace == ""{
-		namespace=clientSet.DefaultNamespace
+func ListConfigMaps(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
+	if namespace == "" {
+		namespace = clientSet.DefaultNamespace
 	}
-	
-	configmaps,err:=clientSet.Client.CoreV1().ConfigMaps(namespace).List(context.TODO(),metav1.ListOptions{})
+
+	configmaps, err := clientSet.Client.CoreV1().ConfigMaps(namespace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	var configMapList [][]string
-	for _,configMap := range configmaps.Items {
-	  configMapList=append(configMapList,[]string{
-		configMap.Name,
-		fmt.Sprintf("%d",len(configMap.Data)),
-		formatDuration(time.Since(configMap.CreationTimestamp.Time)),	
-	})
+	for _, configMap := range configmaps.Items {
+		configMapList = append(configMapList, []string{
+			configMap.Name,
+			fmt.Sprintf("%d", len(configMap.Data)),
+			formatDuration(time.Since(configMap.CreationTimestamp.Time)),
+		})
 	}
-	return configMapList,nil 
-	
+	return configMapList, nil
+
 }
 
-func DescribeConfigMap(configMapName string,namespace string , clientSet *client.K8sConfig)(bytes.Buffer,error){
-	configMap,err:=clientSet.Client.CoreV1().ConfigMaps(namespace).Get(context.TODO(),configMapName,metav1.GetOptions{})
+func DescribeConfigMap(configMapName string, namespace string, clientSet *client.K8sConfig) (bytes.Buffer, error) {
+	configMap, err := clientSet.Client.CoreV1().ConfigMaps(namespace).Get(context.TODO(), configMapName, metav1.GetOptions{})
 	if err != nil {
-		return bytes.Buffer{},err
+		return bytes.Buffer{}, err
 	}
 	configMapTemplate := `
 	ConfigMap Name: {{ .ObjectMeta.Name }}
@@ -84,31 +83,30 @@ func DescribeConfigMap(configMapName string,namespace string , clientSet *client
 
 	tmpl, err := template.New("describe").Parse(configMapTemplate)
 	if err != nil {
-	  
-	   return  bytes.Buffer{},err
-	   }
-	  
-	   var output bytes.Buffer
-	   err = tmpl.Execute(&output,configMap)
-	   if err!=nil {
-		
-		return bytes.Buffer{},err
-	
-	   }
-	  
-	   return output,nil
-	 
+
+		return bytes.Buffer{}, err
+	}
+
+	var output bytes.Buffer
+	err = tmpl.Execute(&output, configMap)
+	if err != nil {
+
+		return bytes.Buffer{}, err
+
+	}
+
+	return output, nil
 
 }
 
-func DeleteConfigMap(configMapName string,namespace string, clientSet *client.K8sConfig)(error){
-	if namespace==""{
-	  namespace=clientSet.DefaultNamespace
+func DeleteConfigMap(configMapName string, namespace string, clientSet *client.K8sConfig) error {
+	if namespace == "" {
+		namespace = clientSet.DefaultNamespace
 	}
-	err:=clientSet.Client.CoreV1().ConfigMaps(namespace).Delete(context.TODO(),configMapName,metav1.DeleteOptions{})
-	if err!=nil {
-	  return err 
+	err := clientSet.Client.CoreV1().ConfigMaps(namespace).Delete(context.TODO(), configMapName, metav1.DeleteOptions{})
+	if err != nil {
+		return err
 	}
-  
-  return nil 
-  }
+
+	return nil
+}

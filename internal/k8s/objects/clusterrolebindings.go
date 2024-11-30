@@ -1,46 +1,43 @@
-package objects 
+package objects
+
 import (
-    "context"
+	"context"
 	"time"
-   
-	"text/template"
+
 	"bytes"
 	client "github.com/Gkemhcs/kubedash/internal/k8s"
+	"text/template"
 
-    metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-   
-//	"gopkg.in/yaml.v3"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	//	"gopkg.in/yaml.v3"
 )
 
+func ListClusterRoleBindings(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
-func ListClusterRoleBindings(namespace string , clientSet *client.K8sConfig)([][]string,error){
-	
-
-	clusterRoleBindings,err:=clientSet.Client.RbacV1().ClusterRoleBindings().List(context.TODO(),metav1.ListOptions{})
+	clusterRoleBindings, err := clientSet.Client.RbacV1().ClusterRoleBindings().List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	var clusterRoleBindingList [][]string
-	for _,clusterRoleBinding := range clusterRoleBindings.Items {
-	  clusterRoleBindingList=append(clusterRoleBindingList,[]string{
-		clusterRoleBinding.Name,
-		clusterRoleBinding.RoleRef.Name,
-		clusterRoleBinding.Subjects[0].Name,
-		clusterRoleBinding.Subjects[0].Kind,
-		
-		formatDuration(time.Since(clusterRoleBinding.CreationTimestamp.Time)),	
-	})
+	for _, clusterRoleBinding := range clusterRoleBindings.Items {
+		clusterRoleBindingList = append(clusterRoleBindingList, []string{
+			clusterRoleBinding.Name,
+			clusterRoleBinding.RoleRef.Name,
+			clusterRoleBinding.Subjects[0].Name,
+			clusterRoleBinding.Subjects[0].Kind,
+
+			formatDuration(time.Since(clusterRoleBinding.CreationTimestamp.Time)),
+		})
 	}
-	return clusterRoleBindingList,nil 
-	
+	return clusterRoleBindingList, nil
+
 }
 
-func DescribeClusterRoleBinding(clusterRoleBindingName string,namespace string , clientSet *client.K8sConfig)(bytes.Buffer,error){
-	
+func DescribeClusterRoleBinding(clusterRoleBindingName string, namespace string, clientSet *client.K8sConfig) (bytes.Buffer, error) {
 
-	clusterRoleBinding,err:=clientSet.Client.RbacV1().ClusterRoleBindings().Get(context.Background(),clusterRoleBindingName,metav1.GetOptions{})
+	clusterRoleBinding, err := clientSet.Client.RbacV1().ClusterRoleBindings().Get(context.Background(), clusterRoleBindingName, metav1.GetOptions{})
 	if err != nil {
-		return bytes.Buffer{},err
+		return bytes.Buffer{}, err
 	}
 	const clusterRoleBindingTemplate = `
 	Name:         {{ .ObjectMeta.Name }}
@@ -84,7 +81,7 @@ func DescribeClusterRoleBinding(clusterRoleBindingName string,namespace string ,
 	}
 
 	var output bytes.Buffer
-	err = tmpl.Execute(&output,clusterRoleBinding)
+	err = tmpl.Execute(&output, clusterRoleBinding)
 	if err != nil {
 		return bytes.Buffer{}, err
 	}

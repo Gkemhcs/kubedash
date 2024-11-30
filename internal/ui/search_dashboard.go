@@ -27,14 +27,13 @@ func initInputField(appUi *AppUI) *tview.InputField {
 				appUi.AppConfig.Pages.SwitchToPage("root")
 			} else if len(searches) == 1 {
 				appUi.CurrentKind = searches[0]
-				
-				
+
 				appUi.AppConfig.Table.initCustom(appUi.CurrentKind, appUi.K8sConfig.DefaultNamespace, appUi.K8sConfig)
 
 			} else if len(searches) >= 2 {
 				appUi.CurrentKind = searches[0]
 				appUi.CurrentNamespace = searches[1]
-				
+
 				appUi.AppConfig.Table.initCustom(appUi.CurrentKind, appUi.CurrentNamespace, appUi.K8sConfig)
 				// Handle input with "in" correctly
 				fmt.Print(appUi.getCurrentKind())

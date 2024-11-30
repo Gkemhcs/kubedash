@@ -20,26 +20,26 @@ type AppUI struct {
 	CurrentKind      string
 	CurrentNamespace string
 	K8sConfig        *client.K8sConfig
-	LoggerConfig *utils.LoggerConfig
+	LoggerConfig     *utils.LoggerConfig
 }
 
-func (ui *AppUI) getCurrentKind()(string){
+func (ui *AppUI) getCurrentKind() string {
 	return ui.CurrentKind
 }
-func (ui *AppUI) getCurrentNamespace()(string){
+func (ui *AppUI) getCurrentNamespace() string {
 	return ui.CurrentNamespace
 }
 func (ui *AppUI) InitDashboard() error {
 	k8sConfig := client.K8sConfig{}
-	
+
 	err := k8sConfig.InitClient()
 	if err != nil {
 		return err
 	}
 	ui.K8sConfig = k8sConfig.GetClient()
 
-	loggerConfig:=utils.LoggerConfig{}
-	ui.LoggerConfig=loggerConfig.InitLogger()
+	loggerConfig := utils.LoggerConfig{}
+	ui.LoggerConfig = loggerConfig.InitLogger()
 
 	ui.AppConfig = &AppConfig{
 		App:      tview.NewApplication(),

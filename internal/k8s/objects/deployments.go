@@ -43,7 +43,7 @@ func DescribeDeployment(deploymentName string, namespace string, clientSet *clie
 
 	deployment, err := clientSet.Client.AppsV1().Deployments(namespace).Get(context.TODO(), deploymentName, metav1.GetOptions{})
 	if err != nil {
-		
+
 		return bytes.Buffer{}, err
 	}
 	deploymentTemplate := `
@@ -180,14 +180,14 @@ Deployment Name: {{ .ObjectMeta.Name }}
 	return output, nil
 
 }
-func DeleteDeployment(deploymentName string,namespace string, clientSet *client.K8sConfig)(error){
-	if namespace==""{
-	  namespace=clientSet.DefaultNamespace
+func DeleteDeployment(deploymentName string, namespace string, clientSet *client.K8sConfig) error {
+	if namespace == "" {
+		namespace = clientSet.DefaultNamespace
 	}
-	err:=clientSet.Client.AppsV1().Deployments(namespace).Delete(context.TODO(),deploymentName,metav1.DeleteOptions{})
-	if err!=nil {
-	  return err 
+	err := clientSet.Client.AppsV1().Deployments(namespace).Delete(context.TODO(), deploymentName, metav1.DeleteOptions{})
+	if err != nil {
+		return err
 	}
-  
-  return nil 
-  }
+
+	return nil
+}

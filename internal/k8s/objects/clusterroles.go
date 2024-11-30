@@ -1,43 +1,40 @@
-package objects 
+package objects
+
 import (
-    "context"
+	"context"
 	"time"
-   
-   
+
 	client "github.com/Gkemhcs/kubedash/internal/k8s"
 
-    metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-   
-	"text/template"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"bytes"
+	"text/template"
 )
 
+func ListClusterRoles(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
-func ListClusterRoles(namespace string , clientSet *client.K8sConfig)([][]string,error){
-	
-	
-	clusterRole,err:=clientSet.Client.RbacV1().ClusterRoles().List(context.TODO(),metav1.ListOptions{})
+	clusterRole, err := clientSet.Client.RbacV1().ClusterRoles().List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	var clusterRoleList [][]string
-	for _,clusterRole := range clusterRole.Items {
-	  clusterRoleList=append(clusterRoleList,[]string{
-		clusterRole.Name,
-		
-		formatDuration(time.Since(clusterRole.CreationTimestamp.Time)),	
-	})
+	for _, clusterRole := range clusterRole.Items {
+		clusterRoleList = append(clusterRoleList, []string{
+			clusterRole.Name,
+
+			formatDuration(time.Since(clusterRole.CreationTimestamp.Time)),
+		})
 	}
-	return clusterRoleList,nil 
-	
+	return clusterRoleList, nil
+
 }
 
-func DescribeClusterRole(clusterRoleName string,namespace string , clientSet *client.K8sConfig)(bytes.Buffer,error){
-	
-	
-	clusterRole,err:=clientSet.Client.RbacV1().ClusterRoles().Get(context.TODO(),clusterRoleName,metav1.GetOptions{})
+func DescribeClusterRole(clusterRoleName string, namespace string, clientSet *client.K8sConfig) (bytes.Buffer, error) {
+
+	clusterRole, err := clientSet.Client.RbacV1().ClusterRoles().Get(context.TODO(), clusterRoleName, metav1.GetOptions{})
 	if err != nil {
-		return bytes.Buffer{},err
+		return bytes.Buffer{}, err
 	}
 	const clusterRoleTemplate = `
 	Name:         {{ .ObjectMeta.Name }}
@@ -71,24 +68,24 @@ func DescribeClusterRole(clusterRoleName string,namespace string , clientSet *cl
 	{{- end }}
 	`
 	tmpl, err := template.New("describe").Parse(clusterRoleTemplate)
-    if err != nil {
-        return bytes.Buffer{}, err
-    }
+	if err != nil {
+		return bytes.Buffer{}, err
+	}
 
-    var output bytes.Buffer
-    err = tmpl.Execute(&output, clusterRole)
-    if err != nil {
-        return bytes.Buffer{}, err
-    }
-    return output, nil	
+	var output bytes.Buffer
+	err = tmpl.Execute(&output, clusterRole)
+	if err != nil {
+		return bytes.Buffer{}, err
+	}
+	return output, nil
 }
 
-func DeleteClusterRole(clusterRoleName string,namespace string, clientSet *client.K8sConfig)(error){
-	
-	err:=clientSet.Client.RbacV1().ClusterRoles().Delete(context.TODO(),clusterRoleName,metav1.DeleteOptions{})
-	if err!=nil {
-	  return err 
+func DeleteClusterRole(clusterRoleName string, namespace string, clientSet *client.K8sConfig) error {
+
+	err := clientSet.Client.RbacV1().ClusterRoles().Delete(context.TODO(), clusterRoleName, metav1.DeleteOptions{})
+	if err != nil {
+		return err
 	}
-  
-  return nil 
-  }
+
+	return nil
+}

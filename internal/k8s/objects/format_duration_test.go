@@ -8,8 +8,8 @@ import (
 func TestFormatDuration(t *testing.T) {
 	// Define test cases
 	testCases := []struct {
-		duration   time.Duration
-		expected   string
+		duration time.Duration
+		expected string
 	}{
 		{
 			duration: 30 * time.Second, // Test with seconds
@@ -33,11 +33,11 @@ func TestFormatDuration(t *testing.T) {
 		},
 		{
 			duration: 25 * time.Hour, // Test with more than a day
-			expected: "1d", // 25 hours should show as "1d"
+			expected: "1d",           // 25 hours should show as "1d"
 		},
 		{
 			duration: 70 * time.Second, // Test with seconds over 60
-			expected: "1m", // 70 seconds should round to 1 minute
+			expected: "1m",             // 70 seconds should round to 1 minute
 		},
 	}
 

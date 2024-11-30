@@ -37,14 +37,14 @@ func ListDaemonSets(namespace string, clientSet *client.K8sConfig) ([][]string, 
 	return daemonSetList, nil
 }
 
-func DeleteDaemonSet(daemonSetName string,namespace string, clientSet *client.K8sConfig)(error){
-	if namespace==""{
-	  namespace=clientSet.DefaultNamespace
+func DeleteDaemonSet(daemonSetName string, namespace string, clientSet *client.K8sConfig) error {
+	if namespace == "" {
+		namespace = clientSet.DefaultNamespace
 	}
-	err:=clientSet.Client.AppsV1().DaemonSets(namespace).Delete(context.TODO(),daemonSetName,metav1.DeleteOptions{})
-	if err!=nil {
-	  return err 
+	err := clientSet.Client.AppsV1().DaemonSets(namespace).Delete(context.TODO(), daemonSetName, metav1.DeleteOptions{})
+	if err != nil {
+		return err
 	}
-  
-  return nil 
-  }
+
+	return nil
+}

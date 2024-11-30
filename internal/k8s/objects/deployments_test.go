@@ -1,14 +1,13 @@
 package objects
 
 import (
-	
-	"testing"
-	"time"
-	"k8s.io/apimachinery/pkg/runtime"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes/fake"
 	"github.com/Gkemhcs/kubedash/internal/k8s"
 	"k8s.io/api/apps/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/kubernetes/fake"
+	"testing"
+	"time"
 )
 
 func TestListingDeployments(t *testing.T) {
@@ -24,8 +23,8 @@ func TestListingDeployments(t *testing.T) {
 			deployments: []runtime.Object{
 				&v1.Deployment{
 					ObjectMeta: metav1.ObjectMeta{
-						Name:      "deployment-1",
-						Namespace: "default",
+						Name:              "deployment-1",
+						Namespace:         "default",
 						CreationTimestamp: metav1.Time{Time: time.Now().Add(-time.Hour)},
 					},
 					Status: v1.DeploymentStatus{
@@ -34,12 +33,11 @@ func TestListingDeployments(t *testing.T) {
 						ReadyReplicas:     3,
 						Replicas:          3,
 					},
-					
 				},
 				&v1.Deployment{
 					ObjectMeta: metav1.ObjectMeta{
-						Name:      "deployment-2",
-						Namespace: "default",
+						Name:              "deployment-2",
+						Namespace:         "default",
 						CreationTimestamp: metav1.Time{Time: time.Now().Add(-2 * time.Hour)},
 					},
 					Status: v1.DeploymentStatus{
@@ -48,7 +46,6 @@ func TestListingDeployments(t *testing.T) {
 						ReadyReplicas:     2,
 						Replicas:          2,
 					},
-					
 				},
 			},
 			targetNamespace: "default",
@@ -63,8 +60,8 @@ func TestListingDeployments(t *testing.T) {
 			deployments: []runtime.Object{
 				&v1.Deployment{
 					ObjectMeta: metav1.ObjectMeta{
-						Name:      "deployment-1",
-						Namespace: "namespace-2",
+						Name:              "deployment-1",
+						Namespace:         "namespace-2",
 						CreationTimestamp: metav1.Time{Time: time.Now().Add(-3 * time.Hour)},
 					},
 					Status: v1.DeploymentStatus{
@@ -73,7 +70,6 @@ func TestListingDeployments(t *testing.T) {
 						ReadyReplicas:     1,
 						Replicas:          1,
 					},
-					
 				},
 			},
 			targetNamespace: "namespace-2",
@@ -83,10 +79,10 @@ func TestListingDeployments(t *testing.T) {
 			expectedSuccess: true,
 		},
 		{
-			testName: "no_deployments_found",
-			deployments: []runtime.Object{},
+			testName:        "no_deployments_found",
+			deployments:     []runtime.Object{},
 			targetNamespace: "namespace-3",
-			expectedOutput: [][]string{},
+			expectedOutput:  [][]string{},
 			expectedSuccess: true,
 		},
 	}
@@ -100,7 +96,6 @@ func TestListingDeployments(t *testing.T) {
 			}
 
 			// Using a context for API calls
-			
 
 			// Call ListDeployments function
 			deploymentList, err := ListDeployments(test.targetNamespace, &k8sConfig)

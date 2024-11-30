@@ -1,15 +1,14 @@
 package objects
 
 import (
-	
 	"testing"
 	"time"
 
+	"github.com/Gkemhcs/kubedash/internal/k8s"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/fake"
-	"github.com/Gkemhcs/kubedash/internal/k8s"
 )
 
 func TestListingPods(t *testing.T) {
@@ -94,16 +93,16 @@ func TestListingPods(t *testing.T) {
 			expectedSuccess: true,
 		},
 		{
-			testName: "no_pods_found",
-			pods:      []runtime.Object{},
+			testName:        "no_pods_found",
+			pods:            []runtime.Object{},
 			targetNamespace: "namespace-3",
-			expectedOutput: [][]string{},
+			expectedOutput:  [][]string{},
 			expectedSuccess: true,
 		},
 	}
 
 	for _, test := range testCases {
-		
+
 		t.Run(test.testName, func(t *testing.T) {
 			fakeClientSet := fake.NewSimpleClientset(test.pods...)
 			k8sConfig := k8s.K8sConfig{
@@ -112,11 +111,10 @@ func TestListingPods(t *testing.T) {
 			}
 
 			// Using a context for API calls
-	
 
 			// Call ListPods function
 			podList, err := ListPods(test.targetNamespace, &k8sConfig)
-			
+
 			// Handle errors
 			if err != nil && test.expectedSuccess {
 				t.Fatalf("unexpected error listing pods: %v", err)
@@ -141,4 +139,3 @@ func TestListingPods(t *testing.T) {
 		})
 	}
 }
-
