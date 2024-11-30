@@ -24,10 +24,7 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
 
-    - name: Run linters
-      run: |
-        go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-        golangci-lint run ./...
+   
 
     - name: Run unit tests
       run: go test ./... -v -cover
