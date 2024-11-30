@@ -1,4 +1,4 @@
-name: CI Pipeline for kubedash
+name: Release Pipeline for kubedash
 
 on:
   push:
