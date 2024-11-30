@@ -31,7 +31,7 @@ jobs:
 
     - name: Build CLI tool
       run: |
-        go build -o dist/kubedash cmd/kubedash/main.go
+        go build -o dist/kubedash main.go
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
