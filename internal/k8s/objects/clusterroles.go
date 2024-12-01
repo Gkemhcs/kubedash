@@ -12,6 +12,14 @@ import (
 	"text/template"
 )
 
+// ListClusterRoles list out the clusterroles in cluster and returns it 
+// parameters:
+// - namespace(string): 
+// - clientSet : the kubernetes client which need to use to fetch the resources
+// returns :
+// - list of clusterroles
+// - error : if any error occurs returns that otherwise returns nil 
+
 func ListClusterRoles(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	clusterRole, err := clientSet.Client.RbacV1().ClusterRoles().List(context.TODO(), metav1.ListOptions{})

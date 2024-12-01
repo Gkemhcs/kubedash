@@ -10,6 +10,15 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+
+// ListServices  list out the clusterrolebings in cluster and returns it 
+// parameters:
+// - namespace(string):  the namespace to which  we need to scope  our search
+// - clientSet : the kubernetes client which need to use to fetch the resources
+// returns :
+// - list of services
+// - error : if any error occurs returns that otherwise returns nil 
+
 func ListServices(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace

@@ -11,6 +11,15 @@ import (
 	//	"gopkg.in/yaml.v3"
 )
 
+
+// ListSecrets  list out the clusterrolebings in cluster and returns it 
+// parameters:
+// - namespace(string):  the namespace to which  we need to scope  our search
+// - clientSet : the kubernetes client which need to use to fetch the resources
+// returns :
+// - list of secrets
+// - error : if any error occurs returns that otherwise returns nil 
+
 func ListSecrets(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	secrets, err := clientSet.Client.CoreV1().Secrets(namespace).List(context.TODO(), metav1.ListOptions{})

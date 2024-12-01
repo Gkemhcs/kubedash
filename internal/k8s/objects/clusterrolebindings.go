@@ -12,6 +12,14 @@ import (
 	//	"gopkg.in/yaml.v3"
 )
 
+// ListClusterRoleBindings  list out the clusterrolebindings in cluster and returns it 
+// parameters:
+// - namespace(string): 
+// - clientSet : the kubernetes client which need to use to fetch the resources
+// returns :
+// - list of clusterrolebindings 
+// - error : if any error occurs returns that otherwise returns nil 
+
 func ListClusterRoleBindings(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	clusterRoleBindings, err := clientSet.Client.RbacV1().ClusterRoleBindings().List(context.TODO(), metav1.ListOptions{})
