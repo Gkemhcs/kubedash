@@ -133,3 +133,35 @@ func GetEndpointFields() []string {
 func GetNodeFields() []string {
 	return []string{"Name", "Status", "Taints", "Version", "Cpu", "Memory", "CpuAllocated", "MemoryAllocated"}
 }
+
+// GetNamespaceFields returns the headers  for  table of nodes
+// Returns:
+// - returns the array of  headers
+func GetNamespaceFields() []string {
+	return []string{"Name", "Status","Age"}
+}
+
+
+// GetAllResources returns the  all k8s resources 
+// Returns:
+// - returns the array of  resources
+func GetAllResources()[]string{
+return []string{"clusterrole","clusterrolebinding","configmap","cronjob","daemonset","deployment","endpoint","ingress","job","namespace","node","persistentvolume","pod","replicaset","role","replicaset","secret","serviceaccount","service","storageclass"}
+}
+
+// IsNamespaced function check whether given resource is namespace scoped or not 
+// Parameters:
+// - resourceKind :  the resourceKind we need to check
+func IsNamespaced(resourceKind string)(bool){
+	clusterScopedResources:=[]string{"clusterrole","clusterrolebinding","persistentvolume","storageclass","node","namespace"}
+	isNamespaced:=true 
+	for _,kind := range clusterScopedResources {
+		if resourceKind == kind {
+			isNamespaced=false
+		}
+
+	}
+	return isNamespaced
+
+}
+

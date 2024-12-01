@@ -10,7 +10,7 @@ import (
 	//	"gopkg.in/yaml.v3"
 )
 
-// ListRoles  list out the clusterrolebings in cluster and returns it
+// ListRoles  list out the roles in cluster and returns it
 // parameters:
 // - namespace(string):  the namespace to which  we need to scope  our search
 // - clientSet : the kubernetes client which need to use to fetch the resources
@@ -40,7 +40,7 @@ func ListRoles(namespace string, clientSet *client.K8sConfig) ([][]string, error
 
 // DeleteRole  delete the  Role and returns the status of deletion
 // Parameters:
-// - roleName : the name of clusterRoleBinding we need to delete
+// - roleName : the name of role we need to delete
 // - namespace: tha namespace to which we need to scope our search
 // - clientSet: the  k8sclient need to use to fetch the resources
 // Returns:

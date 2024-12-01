@@ -18,7 +18,7 @@ type TableConfig struct {
 }
 
 func (tableConfig *TableConfig) startAutoRefresh(appUI *AppUI) {
-	ticker := time.NewTicker(1 * time.Second) // Tick every second
+	ticker := time.NewTicker(2 * time.Second) // Tick every second
 
 	go func() {
 		defer ticker.Stop()
@@ -84,7 +84,7 @@ func (tableConfig *TableConfig) initDefaultTable(appUI *AppUI) {
 					bytedata, err = objects.DescribeConfigMap(cell.Text, appUI.CurrentNamespace, appUI.K8sConfig)
 				case "clusterrolebinding":
 
-					bytedata, err = objects.DescribeClusterRoleBinding(cell.Text,  appUI.K8sConfig)
+					bytedata, err = objects.DescribeClusterRoleBinding(cell.Text, appUI.K8sConfig)
 				case "clusterrole":
 
 					bytedata, err = objects.DescribeClusterRole(cell.Text, appUI.K8sConfig)
@@ -110,47 +110,7 @@ func (tableConfig *TableConfig) initDefaultTable(appUI *AppUI) {
 
 			row, _ := table.GetSelection()
 			cell := table.GetCell(row, 0)
-			var err error
-			switch appUI.CurrentKind {
-			case "pod":
-				err = objects.DeletePod(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "deployment":
-				err = objects.DeleteDeployment(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "clusterrole":
-				err = objects.DeleteClusterRole(cell.Text,  appUI.K8sConfig)
-			case "configmap":
-				err = objects.DeleteConfigMap(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "cronjob":
-				err = objects.DeleteCronJob(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "daemonset":
-				err = objects.DeleteDaemonSet(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "ingress":
-				err = objects.DeleteIngress(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "job":
-				err = objects.DeleteJob(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "persistentvolume":
-				err = objects.DeletePersistentVolume(cell.Text,  appUI.K8sConfig)
-			case "replicaset":
-				err = objects.DeleteReplicaSet(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "rolebinding":
-				err = objects.DeleteRoleBinding(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "role":
-				err = objects.DeleteRole(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "secret":
-				err = objects.DeleteSecret(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "serviceaccount":
-				err = objects.DeleteServiceAccount(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "service":
-				err = objects.DeleteService(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
-			case "storageclass":
-				err = objects.DeleteStorageClass(cell.Text, appUI.K8sConfig)
-			}
-			if err != nil {
-				appUI.LoggerConfig.Logger.Warn(err)
-
-			}
-			appUI.AppConfig.Pages.SwitchToPage("root")
-
+			showModal(appUI,cell.Text)
 		}
 		return event
 	})
@@ -185,7 +145,7 @@ func (tableConfig *TableConfig) initCustom(kind string, namespace string, k8sCli
 		dataList, err = objects.ListServices(namespace, k8sClient)
 	case "storageclass":
 		headers = client.GetStorageClassFields()
-		dataList, err = objects.ListStorageClasses( k8sClient)
+		dataList, err = objects.ListStorageClasses(k8sClient)
 	case "job":
 		headers = client.GetJobFields()
 		dataList, err = objects.ListJobs(namespace, k8sClient)
@@ -195,6 +155,9 @@ func (tableConfig *TableConfig) initCustom(kind string, namespace string, k8sCli
 	case "ingress":
 		headers = client.GetIngressFields()
 		dataList, err = objects.ListIngresses(namespace, k8sClient)
+	case "namespace":
+		headers = client.GetNamespaceFields()
+		dataList, err = objects.ListNamespaces(k8sClient)
 	case "persistentvolume":
 		headers = client.GetPersistentVolumeFields()
 		dataList, err = objects.ListPersistentVolumes(k8sClient)
