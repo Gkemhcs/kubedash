@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "0.0.1"
+var version = "v1.0.0"
 var author = "Gkemhcs"
 
 var versionCmd = &cobra.Command{
