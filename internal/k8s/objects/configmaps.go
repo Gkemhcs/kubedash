@@ -12,15 +12,13 @@ import (
 	//	"gopkg.in/yaml.v3"
 )
 
-
-// ListConfigMaps  list out the clusterrolebings in cluster and returns it 
+// ListConfigMaps  list out the clusterrolebings in cluster and returns it
 // parameters:
 // - namespace(string):  the namespace to which  we need to scope  our search
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of configmaps
-// - error : if any error occurs returns that otherwise returns nil 
-
+// - error : if any error occurs returns that otherwise returns nil
 func ListConfigMaps(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace
@@ -42,6 +40,14 @@ func ListConfigMaps(namespace string, clientSet *client.K8sConfig) ([][]string, 
 
 }
 
+// DescribeConfigMap returns the description of clusterrolebindings resource
+// Parameters:
+// - configMapName : the name of configMap we need to describe
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - description of configMap as a buffer of bytes
+// - err will be returned if anything occurs ,otherwise returned nil
 func DescribeConfigMap(configMapName string, namespace string, clientSet *client.K8sConfig) (bytes.Buffer, error) {
 	configMap, err := clientSet.Client.CoreV1().ConfigMaps(namespace).Get(context.TODO(), configMapName, metav1.GetOptions{})
 	if err != nil {
@@ -108,6 +114,13 @@ func DescribeConfigMap(configMapName string, namespace string, clientSet *client
 
 }
 
+// DeleteConfigMap  delete the ConfigMap and returns the status of deletion
+// Parameters:
+// - configMapName : the name of clusterRoleBinding we need to delete
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - if deletion succeeds returns nil, otherwise returns the error occured
 func DeleteConfigMap(configMapName string, namespace string, clientSet *client.K8sConfig) error {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace

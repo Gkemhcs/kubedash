@@ -32,10 +32,12 @@ type podSpec struct {
 }
 type podStatus struct {
 	Phase      string                `json:"phase"`
-	Ip         string                `json:"podIP"`
+	IP         string                `json:"podIP"`
 	Conditions []corev1.PodCondition `json:"conditions"`
 	QOSClass   corev1.PodQOSClass    `json:"qosClass"`
 }
+
+// Pod contains details of pod
 type Pod struct {
 	Metadata podMetadata `json:"metadata"`
 	Spec     podSpec     `json:"spec"`
@@ -53,16 +55,13 @@ func formatDuration(d time.Duration) string {
 	return fmt.Sprintf("%dd", int(d.Hours()/24))
 }
 
-
-
-// ListPods  list out the clusterrolebings in cluster and returns it 
+// ListPods  list out the clusterrolebings in cluster and returns it
 // parameters:
 // - namespace(string):  the namespace to which  we need to scope  our search
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of pods
-// - error : if any error occurs returns that otherwise returns nil 
-
+// - error : if any error occurs returns that otherwise returns nil
 func ListPods(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace
@@ -81,7 +80,7 @@ func ListPods(namespace string, clientSet *client.K8sConfig) ([][]string, error)
 		for _, container := range pod.Status.ContainerStatuses {
 			restartCount += container.RestartCount
 			if container.Ready {
-				readyCount += 1
+				readyCount++
 			}
 		}
 
@@ -99,6 +98,14 @@ func ListPods(namespace string, clientSet *client.K8sConfig) ([][]string, error)
 	return podList, nil
 }
 
+// DescribePod  returns the description of clusterrolebindings resource
+// Parameters:
+// - podName : the name of pod we need to describe
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - description of pod as a buffer of bytes
+// - err will be returned if anything occurs ,otherwise returned nil
 func DescribePod(podName string, namespace string, clientSet *client.K8sConfig) (bytes.Buffer, error) {
 
 	resp, err := clientSet.Client.CoreV1().Pods(namespace).Get(context.TODO(), podName, metav1.GetOptions{})
@@ -198,6 +205,13 @@ func DescribePod(podName string, namespace string, clientSet *client.K8sConfig) 
 
 }
 
+// DeletePod  delete the Pod and returns the status of deletion
+// Parameters:
+// - podName : the name of clusterRoleBinding we need to delete
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - if deletion succeeds returns nil, otherwise returns the error occured
 func DeletePod(podName string, namespace string, clientSet *client.K8sConfig) error {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace

@@ -12,14 +12,13 @@ import (
 	"text/template"
 )
 
-// ListClusterRoles list out the clusterroles in cluster and returns it 
+// ListClusterRoles list out the clusterroles in cluster and returns it
 // parameters:
-// - namespace(string): 
+// - namespace(string):
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of clusterroles
-// - error : if any error occurs returns that otherwise returns nil 
-
+// - error : if any error occurs returns that otherwise returns nil
 func ListClusterRoles(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	clusterRole, err := clientSet.Client.RbacV1().ClusterRoles().List(context.TODO(), metav1.ListOptions{})
@@ -38,6 +37,14 @@ func ListClusterRoles(namespace string, clientSet *client.K8sConfig) ([][]string
 
 }
 
+// DescribeClusterRole  returns the description of clusterrolebindings resource
+// Parameters:
+// - clusterRoleName : the name of clusterRole we need to describe
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - description of clusterrole as a buffer of bytes
+// - err will be returned if anything occurs ,otherwise returned nil
 func DescribeClusterRole(clusterRoleName string, namespace string, clientSet *client.K8sConfig) (bytes.Buffer, error) {
 
 	clusterRole, err := clientSet.Client.RbacV1().ClusterRoles().Get(context.TODO(), clusterRoleName, metav1.GetOptions{})
@@ -88,6 +95,13 @@ func DescribeClusterRole(clusterRoleName string, namespace string, clientSet *cl
 	return output, nil
 }
 
+// DeleteClusterRole  delete the ClusterRole and returns the status of deletion
+// Parameters:
+// - clusterRoleName : the name of clusterRole we need to delete
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - if deletion succeeds returns nil, otherwise returns the error occured
 func DeleteClusterRole(clusterRoleName string, namespace string, clientSet *client.K8sConfig) error {
 
 	err := clientSet.Client.RbacV1().ClusterRoles().Delete(context.TODO(), clusterRoleName, metav1.DeleteOptions{})

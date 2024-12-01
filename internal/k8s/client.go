@@ -5,11 +5,13 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+// K8sConfig contains k8s clientSet and defaultNamespace
 type K8sConfig struct {
 	Client           kubernetes.Interface
 	DefaultNamespace string
 }
 
+// InitClient function  initializes the k8s client
 func (k8sConfig *K8sConfig) InitClient() error {
 	kubeconfig := clientcmd.NewDefaultClientConfigLoadingRules().GetDefaultFilename()
 
@@ -30,6 +32,7 @@ func (k8sConfig *K8sConfig) InitClient() error {
 
 }
 
+// GetClient function returns the k8sConfig pointer
 func (k8sConfig *K8sConfig) GetClient() *K8sConfig {
 	return k8sConfig
 }

@@ -11,14 +11,13 @@ import (
 	//	"gopkg.in/yaml.v3"
 )
 
-// ListNodes  list out the clusterrolebings in cluster and returns it 
+// ListNodes  list out the clusterrolebings in cluster and returns it
 // parameters:
-// - namespace(string): 
+// - namespace(string):
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of Nodes
-// - error : if any error occurs returns that otherwise returns nil 
-
+// - error : if any error occurs returns that otherwise returns nil
 func ListNodes(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	nodes, err := clientSet.Client.CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})

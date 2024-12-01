@@ -18,12 +18,12 @@ var rootCmd = &cobra.Command{
 	Short: "A CLI tool with tview and cobra integration dislatys",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		kubeUi := ui.AppUI{}
-		err := kubeUi.InitDashboard()
+		kubeUI := ui.AppUI{}
+		err := kubeUI.InitDashboard()
 		if err != nil {
 			os.Exit(1)
 		}
-		if err = kubeUi.AppConfig.App.SetRoot(kubeUi.AppConfig.Pages, true).Run(); err != nil {
+		if err = kubeUI.AppConfig.App.SetRoot(kubeUI.AppConfig.Pages, true).Run(); err != nil {
 			fmt.Fprintf(os.Stderr, "Error running application: %v\n", err)
 			os.Exit(1)
 
@@ -32,6 +32,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// Execute executes the cli
 func Execute() error {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error executing command: %v\n", err)

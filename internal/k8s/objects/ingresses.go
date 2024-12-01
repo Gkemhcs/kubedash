@@ -10,16 +10,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-
-
-// ListIngresses  list out the clusterrolebings in cluster and returns it 
+// ListIngresses  list out the clusterrolebings in cluster and returns it
 // parameters:
 // - namespace(string):  the namespace to which  we need to scope  our search
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of ingresses
-// - error : if any error occurs returns that otherwise returns nil 
-
+// - error : if any error occurs returns that otherwise returns nil
 func ListIngresses(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace
@@ -54,6 +51,13 @@ func ListIngresses(namespace string, clientSet *client.K8sConfig) ([][]string, e
 	return ingressesList, nil
 }
 
+// DeleteIngress delete the Ingress and returns the status of deletion
+// Parameters:
+// - ingressName : the name of clusterRoleBinding we need to delete
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - if deletion succeeds returns nil, otherwise returns the error occured
 func DeleteIngress(ingressName string, namespace string, clientSet *client.K8sConfig) error {
 	if namespace == "" {
 		namespace = clientSet.DefaultNamespace

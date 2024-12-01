@@ -10,14 +10,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-
-// ListStorageClasses  list out the clusterrolebings in cluster and returns it 
+// ListStorageClasses  list out the clusterrolebings in cluster and returns it
 // parameters:
 // - namespace(string):  the namespace to which  we need to scope  our search
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of storageClasses
-// - error : if any error occurs returns that otherwise returns nil 
+// - error : if any error occurs returns that otherwise returns nil
 func ListStorageClasses(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	storageClassments, err := clientSet.Client.StorageV1().StorageClasses().List(context.TODO(), metav1.ListOptions{})
@@ -41,6 +40,13 @@ func ListStorageClasses(namespace string, clientSet *client.K8sConfig) ([][]stri
 	return storageClassList, nil
 }
 
+// DeleteStorageClass  delete the StorageClass and returns the status of deletion
+// Parameters:
+// - storageClassName : the name of clusterRoleBinding we need to delete
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - if deletion succeeds returns nil, otherwise returns the error occured
 func DeleteStorageClass(storageClassName string, namespace string, clientSet *client.K8sConfig) error {
 
 	err := clientSet.Client.StorageV1().StorageClasses().Delete(context.TODO(), storageClassName, metav1.DeleteOptions{})

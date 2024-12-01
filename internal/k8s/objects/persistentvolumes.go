@@ -11,14 +11,13 @@ import (
 	//	"gopkg.in/yaml.v3"
 )
 
-
-// ListPersistentVolumes  list out the clusterrolebings in cluster and returns it 
+// ListPersistentVolumes  list out the clusterrolebings in cluster and returns it
 // parameters:
-// - namespace(string):  
+// - namespace(string):
 // - clientSet : the kubernetes client which need to use to fetch the resources
 // returns :
 // - list of peristentvolumes
-// - error : if any error occurs returns that otherwise returns nil 
+// - error : if any error occurs returns that otherwise returns nil
 func ListPersistentVolumes(namespace string, clientSet *client.K8sConfig) ([][]string, error) {
 
 	persistentVolumes, err := clientSet.Client.CoreV1().PersistentVolumes().List(context.TODO(), metav1.ListOptions{})
@@ -45,6 +44,13 @@ func ListPersistentVolumes(namespace string, clientSet *client.K8sConfig) ([][]s
 
 }
 
+// DeletePersistentVolume  delete the PersistentVolume and returns the status of deletion
+// Parameters:
+// - persistentVolumeName : the name of clusterRoleBinding we need to delete
+// - namespace: tha namespace to which we need to scope our search
+// - clientSet: the  k8sclient need to use to fetch the resources
+// Returns:
+// - if deletion succeeds returns nil, otherwise returns the error occured
 func DeletePersistentVolume(volumeName string, namespace string, clientSet *client.K8sConfig) error {
 
 	err := clientSet.Client.CoreV1().PersistentVolumes().Delete(context.TODO(), volumeName, metav1.DeleteOptions{})
