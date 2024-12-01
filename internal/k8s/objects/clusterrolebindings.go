@@ -105,11 +105,10 @@ func DescribeClusterRoleBinding(clusterRoleBindingName string, clientSet *client
 // DeleteClusterRoleBinding  delete the ClusterRoleBinding and returns the status of deletion
 // Parameters:
 // - clusterRoleBindingName : the name of clusterRoleBinding we need to delete
-// - namespace: tha namespace to which we need to scope our search
 // - clientSet: the  k8sclient need to use to fetch the resources
 // Returns:
 // - if deletion succeeds returns nil, otherwise returns the error occured
-func DeleteClusterRoleBinding(clusterRoleBindingName string, namespace string, clientSet *client.K8sConfig) error {
+func DeleteClusterRoleBinding(clusterRoleBindingName string, clientSet *client.K8sConfig) error {
 
 	err := clientSet.Client.RbacV1().ClusterRoleBindings().Delete(context.TODO(), clusterRoleBindingName, metav1.DeleteOptions{})
 	if err != nil {

@@ -84,10 +84,10 @@ func (tableConfig *TableConfig) initDefaultTable(appUI *AppUI) {
 					bytedata, err = objects.DescribeConfigMap(cell.Text, appUI.CurrentNamespace, appUI.K8sConfig)
 				case "clusterrolebinding":
 
-					bytedata, err = objects.DescribeClusterRoleBinding(cell.Text, appUI.CurrentNamespace, appUI.K8sConfig)
+					bytedata, err = objects.DescribeClusterRoleBinding(cell.Text,  appUI.K8sConfig)
 				case "clusterrole":
 
-					bytedata, err = objects.DescribeClusterRole(cell.Text, appUI.CurrentNamespace, appUI.K8sConfig)
+					bytedata, err = objects.DescribeClusterRole(cell.Text, appUI.K8sConfig)
 				default:
 					appUI.LoggerConfig.Logger.Info("default was chosen", appUI.CurrentKind)
 				}
@@ -117,7 +117,7 @@ func (tableConfig *TableConfig) initDefaultTable(appUI *AppUI) {
 			case "deployment":
 				err = objects.DeleteDeployment(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
 			case "clusterrole":
-				err = objects.DeleteClusterRole(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
+				err = objects.DeleteClusterRole(cell.Text,  appUI.K8sConfig)
 			case "configmap":
 				err = objects.DeleteConfigMap(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
 			case "cronjob":
@@ -129,7 +129,7 @@ func (tableConfig *TableConfig) initDefaultTable(appUI *AppUI) {
 			case "job":
 				err = objects.DeleteJob(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
 			case "persistentvolume":
-				err = objects.DeletePersistentVolume(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
+				err = objects.DeletePersistentVolume(cell.Text,  appUI.K8sConfig)
 			case "replicaset":
 				err = objects.DeleteReplicaSet(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
 			case "rolebinding":
@@ -143,7 +143,7 @@ func (tableConfig *TableConfig) initDefaultTable(appUI *AppUI) {
 			case "service":
 				err = objects.DeleteService(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
 			case "storageclass":
-				err = objects.DeleteStorageClass(cell.Text, appUI.getCurrentNamespace(), appUI.K8sConfig)
+				err = objects.DeleteStorageClass(cell.Text, appUI.K8sConfig)
 			}
 			if err != nil {
 				appUI.LoggerConfig.Logger.Warn(err)
@@ -185,7 +185,7 @@ func (tableConfig *TableConfig) initCustom(kind string, namespace string, k8sCli
 		dataList, err = objects.ListServices(namespace, k8sClient)
 	case "storageclass":
 		headers = client.GetStorageClassFields()
-		dataList, err = objects.ListStorageClasses(namespace, k8sClient)
+		dataList, err = objects.ListStorageClasses( k8sClient)
 	case "job":
 		headers = client.GetJobFields()
 		dataList, err = objects.ListJobs(namespace, k8sClient)
@@ -197,7 +197,7 @@ func (tableConfig *TableConfig) initCustom(kind string, namespace string, k8sCli
 		dataList, err = objects.ListIngresses(namespace, k8sClient)
 	case "persistentvolume":
 		headers = client.GetPersistentVolumeFields()
-		dataList, err = objects.ListPersistentVolumes(namespace, k8sClient)
+		dataList, err = objects.ListPersistentVolumes(k8sClient)
 	case "serviceaccount":
 		headers = client.GetServiceAccountFields()
 		dataList, err = objects.ListServiceAccounts(namespace, k8sClient)
@@ -209,16 +209,16 @@ func (tableConfig *TableConfig) initCustom(kind string, namespace string, k8sCli
 		dataList, err = objects.ListRoleBindings(namespace, k8sClient)
 	case "clusterrole":
 		headers = client.GetClusterRoleFields()
-		dataList, err = objects.ListClusterRoles(namespace, k8sClient)
+		dataList, err = objects.ListClusterRoles(k8sClient)
 	case "clusterrolebinding":
 		headers = client.GetClusterRoleBindingFields()
-		dataList, err = objects.ListClusterRoleBindings(namespace, k8sClient)
+		dataList, err = objects.ListClusterRoleBindings(k8sClient)
 	case "endpoint":
 		headers = client.GetEndpointFields()
 		dataList, err = objects.ListEndpoints(namespace, k8sClient)
 	case "node":
 		headers = client.GetNodeFields()
-		dataList, err = objects.ListNodes(namespace, k8sClient)
+		dataList, err = objects.ListNodes(k8sClient)
 
 	default:
 		headers = client.GetPodFields()
