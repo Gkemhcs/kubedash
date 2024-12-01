@@ -21,7 +21,7 @@
   - `logrus`: For structured logging.
 
 ## Demo Video
-[🎥videolink🎥]("https://drive.google.com/file/d/1Mi8OSCNpTuJ_DfJIvd4O5X7vRrDssTcZ/view?usp=sharing") 
+[🎥videolink🎥](https://drive.google.com/file/d/1Mi8OSCNpTuJ_DfJIvd4O5X7vRrDssTcZ/view?usp=sharing) 
 
 
 ## Images 
