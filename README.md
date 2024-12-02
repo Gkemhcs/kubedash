@@ -1,5 +1,7 @@
-# kubedash
+# KUBEDASH
+
 [![Release Pipeline for kubedash](https://github.com/Gkemhcs/kubedash/actions/workflows/release.yaml/badge.svg)](https://github.com/Gkemhcs/kubedash/actions/workflows/release.yaml)
+[![CI Pipeline for kubedash](https://github.com/Gkemhcs/kubedash/actions/workflows/ci.yaml/badge.svg?event=push)](https://github.com/Gkemhcs/kubedash/actions/workflows/ci.yaml)
 
 **kubedash** is a terminal-based Kubernetes dashboard that provides a simple and interactive way to manage Kubernetes resources directly from the command line. It allows you to list, search, describe, and delete resources with ease. Built with Go using the `tview`, `cobra`, and `logrus` libraries, kubedash offers a clean, user-friendly terminal interface for Kubernetes management.
 
